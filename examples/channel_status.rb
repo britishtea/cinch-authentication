@@ -45,9 +45,10 @@ end
 
 bot = Cinch::Bot.new do
   configure do |c|
-    c.server   = 'irc.freenode.org'
-    c.channels = ['#test-lala']
-    c.authentication_strategy = :channel_status
+    c.server                  = 'irc.freenode.org'
+    c.channels                = ['#authentication-test']
+    c.authentication          = Cinch::Configuration::Authentication
+    c.authentication.strategy = :channel_status
     
     c.plugins.plugins << Admin
     c.plugins.options[Admin][:authentication_level] = :o

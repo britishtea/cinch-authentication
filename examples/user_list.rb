@@ -46,11 +46,12 @@ end
 
 bot = Cinch::Bot.new do
   configure do |c|
-    c.server                  = 'localhost'
-    c.channels                = ['#test']
-    c.authentication_strategy = :user_list
-    c.admins                  = ['waxjar']
-    c.users                   = c.admins + ['cinch_user']
+    c.server                  = 'irc.freenode.org'
+    c.channels                = ['#authentication-test']
+    c.authentication          = Cinch::Configuration::Authentication.new
+    c.authentication.strategy = :user_list
+    c.authentication.admins   = ['waxjar']
+    c.authentication.users    = c.authentication.admins + ['cinch_user']
     
     c.plugins.plugins << Admin
     c.plugins.options[Admin][:authentication_level] = :admins

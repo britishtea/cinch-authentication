@@ -10,7 +10,7 @@ module Cinch
       set :help, <<-USAGE.gsub(/^ {6}/, '')
         Allows you to add/delete users from user lists used for authentication.
         Usage:
-        - !add_to_<level> <nickname>:Adds a user to the <level> list.
+        - !add_to_<level> <nickname>: Adds a user to the <level> list.
         - !delete_from_<level> <nickname>: Deletes a user from the <level> list.
         - !show_<level>_list: Shows the <level> list.
       USAGE

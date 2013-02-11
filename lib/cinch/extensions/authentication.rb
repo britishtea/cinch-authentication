@@ -1,3 +1,5 @@
+require 'cinch/configuration/authentication'
+
 module Cinch
   module Extensions
     module Authentication
@@ -31,14 +33,17 @@ module Cinch
       # Returns a Boolean.
       def authenticated?(m, levels = nil)
         strategy = config[:authentication_strategy] || 
-          bot.config.authentication_strategy
+          bot.config.authentication.strategy
         levels   = levels || config[:authentication_level] ||
-          bot.config.authentication_level
+          bot.config.authentication.level
 
         case strategy
           when :channel_status then return _channel_status_strategy m, levels
           when :user_list then return _user_list_strategy m, levels
           when :user_login then return _user_login_strategy m, levels
+          when :channel_status then return channel_status_strategy m, levels
+          when :user_list then return user_list_strategy m, levels
+          when :user_login then return user_login_strategy m, levels
         end
 
         bot.loggers.error 'You have not configured an authentication ' +
@@ -50,8 +55,15 @@ module Cinch
       #
       # m     - The Cinch::Message.
       # level - The level Symbol (default: :o).
-      def _channel_status_strategy(m, level = :o)
-        channel    = config[:channel] ? Channel(config[:channel]) : m.channel
+      def channel_status_strategy(m, level = :o)
+        if config.has_key? :authentication_channel
+          channel = Channel channel[:authentication_channel]
+        elsif bot.config.authentication.channel
+          channel = Channel bot.config.authentication.channel
+        else
+          channel = m.channel
+        end
+
         user_modes = channel.users[m.user]
         modes      = { q: 'founder', a: 'admin', o: 'operator',
           h: 'half-operator', v: 'voice' }
@@ -69,23 +81,23 @@ module Cinch
       # Internal: Checks if the user sending the message is on the user list.
       #
       # m      - The Cinch::Message.
-      # levels - The level Symbol (default: :admins).
+      # levels - The level Symbol(s).
       #
       # Returns a Boolean.
-      def _user_list_strategy(m, levels = :admins)
+      def user_list_strategy(m, levels)
         unless m.user.authed?
           m.user.notice "This command requires you to be authenticated."
           return false
         end
 
         user_list = Array(levels).each_with_object [] do |level, list|
-          list.concat(config[level] || bot.config.send(level))
+          list.concat(config[level] || bot.config.authentication.send(level))
         end
 
         bot.loggers.debug user_list.inspect
         
         if user_list.nil?
-          bot.loggers.error "You have not configured any user lists."
+          bot.loggers.debug "You have not configured any user lists."
         end
 
         unless user_list.include? m.user.nick
