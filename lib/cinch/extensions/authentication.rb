@@ -65,6 +65,36 @@ module Cinch
         
         return false
       end
+
+      # Internal: Checks if the user sending the message is on the user list.
+      #
+      # m      - The Cinch::Message.
+      # levels - The level Symbol (default: :admins).
+      #
+      # Returns a Boolean.
+      def _user_list_strategy(m, levels = :admins)
+        unless m.user.authed?
+          m.user.notice "This command requires you to be authenticated."
+          return false
+        end
+
+        user_list = Array(levels).each_with_object [] do |level, list|
+          list.concat(config[level] || bot.config.send(level))
+        end
+
+        bot.loggers.debug user_list.inspect
+        
+        if user_list.nil?
+          bot.loggers.error "You have not configured any user lists."
+        end
+
+        unless user_list.include? m.user.nick
+          m.user.notice "You are not authorized to run this command."
+          return false
+        end
+
+        return true
+      end
     end
   end
 end
