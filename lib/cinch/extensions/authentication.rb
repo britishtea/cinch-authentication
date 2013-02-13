@@ -103,6 +103,40 @@ module Cinch
 
         return true
       end
+
+      # Internal: Checks if the user sending the message has logged in.
+      #
+      # m- The Cinch::Message.
+      # levels - The level Symbol(s).
+      def login_strategy(m, levels)
+        if current_user(m).nil?
+          m.user.notice "You are not authorized to run this command. Please " +
+            "log in using !login [<username>] <password>."
+          return false
+        end
+
+        levels = Array(levels)
+
+        levels.each do |level|
+          level_lambda = config[level] || bot.config.authentication.send(level)
+
+          return true if level_lambda.call current_user(m)
+        end
+
+        # The previous check will fail if no level is given.
+        return true if levels.nil?
+
+        m.user.notice 'You are not authorized to run this command.'
+        return false
+      end
+
+      # Public: Returns the nickname of the currently logged in user.
+      #
+      # Returns a String.
+      # Returns nil when a user is not logged in.
+      def current_user(m)
+        bot.config.authentication.logged_in[m.user]
+      end
     end
   end
 end
