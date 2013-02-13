@@ -149,3 +149,6 @@ module Cinch
     end
   end
 end
+
+require 'cinch/plugins/user_login'
+require 'cinch/plugins/user_list'
