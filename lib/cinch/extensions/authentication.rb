@@ -18,7 +18,7 @@ module Cinch
       #
       # m      - The Cinch::Message.
       # levels - The level(s) of authentication Symbol(s) the user must have
-      #          (default: nil). See the examples.
+      #          (default: nil).
       #
       # Examples
       # 
@@ -38,24 +38,20 @@ module Cinch
           bot.config.authentication.level
 
         case strategy
-          when :channel_status then return _channel_status_strategy m, levels
-          when :user_list then return _user_list_strategy m, levels
-          when :user_login then return _user_login_strategy m, levels
           when :channel_status then return channel_status_strategy m, levels
-          when :user_list then return user_list_strategy m, levels
-          when :user_login then return user_login_strategy m, levels
+          when :list then return list_strategy m, levels
+          when :login then return login_strategy m, levels
         end
 
-        bot.loggers.error 'You have not configured an authentication ' +
+        raise StandardError, 'You have not configured an authentication ' +
           'strategy.'
-        return false
       end
 
       # Internal: Checks if the user is an operator on the channel.
       #
       # m     - The Cinch::Message.
-      # level - The level Symbol (default: :o).
-      def channel_status_strategy(m, level = :o)
+      # level - The level Symbol.
+      def channel_status_strategy(m, level)
         if config.has_key? :authentication_channel
           channel = Channel channel[:authentication_channel]
         elsif bot.config.authentication.channel
@@ -84,7 +80,7 @@ module Cinch
       # levels - The level Symbol(s).
       #
       # Returns a Boolean.
-      def user_list_strategy(m, levels)
+      def list_strategy(m, levels)
         unless m.user.authed?
           m.user.notice "This command requires you to be authenticated."
           return false
