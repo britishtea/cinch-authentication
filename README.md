@@ -1,7 +1,7 @@
 # Cinch-authentication
 
-An authentication system with multiple strategies for the [Cinch](cinch) IRC
-framework.
+An authentication system with multiple strategies for the
+[Cinch](https://github.com/cinchrb/cinch) IRC framework.
 
 ## Features
 
@@ -39,7 +39,7 @@ module Cinch::Plugin
     match /get_topic/s, :method => :get_topic
 
     def set_topic(m, topic)
-      return unless authenticated? m, :admin
+      return unless authenticated? m
 
       # ...
     end
@@ -53,8 +53,9 @@ end
 
 ## Installation
 
-...
+`gem install cinch-authentication` or add `gem 'cinch-authentication'` to your
+Gemfile.
 
 ## License
 
-MIT
+See the LICENSE file.
