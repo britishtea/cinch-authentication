@@ -10,9 +10,9 @@ module Cinch
       set :help, <<-USAGE.gsub(/^ {6}/, '')
         Allows you to login to run commands that require authorization.
         Usage:
-        - !register [<nickname>] <password>: Registration (note: <nickname> defauts to your current nickname if ommited).
+        - !register [<nickname>] <password>: Registration (note: <nickname> defaults to your current nickname if ommited).
         - !login [<nickname>] <password>: Logging in (note: <nickname> defaults to your current nickname if ommited).
-        - !logout: Logout. Nickname defaults to the current nickname.
+        - !logout: Logout.
       USAGE
 
       match /register (?:(\S+) )?(\S+)/s, :method => :register
