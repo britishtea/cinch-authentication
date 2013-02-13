@@ -60,6 +60,12 @@ module Cinch
           channel = m.channel
         end
 
+        if level.nil?
+          raise StandardError, "You haven't configured an authentication level."
+        end
+
+        bot.loggers.debug level.inspect
+
         user_modes = channel.users[m.user]
         modes      = { q: 'founder', a: 'admin', o: 'operator',
           h: 'half-operator', v: 'voice' }
@@ -69,9 +75,12 @@ module Cinch
         end
 
         m.user.notice "This command requires at least #{modes[level]} status " +
-         "on #{channel}."
+          "on #{channel}."
         
         return false
+      rescue => e
+        m.user.notice 'Something went wrong.'
+        raise
       end
 
       # Internal: Checks if the user sending the message is on the user list.
