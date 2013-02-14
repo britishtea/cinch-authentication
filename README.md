@@ -15,7 +15,9 @@ plugin level and on the command level, all at the same time.
 Cinch-authentication can be set up to require authorization for a full plugin
 
 ```ruby
-module Cinch::Plugin
+require 'cinch/extensions/authentication'
+
+module Cinch::Plugins
   class Admin
     include Cinch::Plugin
     include Cinch::Extensions::Authentication
@@ -30,7 +32,9 @@ end
 Or only for a few commands.
 
 ```ruby
-module Cinch::Plugin
+require 'cinch/extensions/authentication'
+
+module Cinch::Plugins
   class Admin
     include Cinch::Plugin
     include Cinch::Extensions::Authentication
@@ -53,8 +57,17 @@ end
 
 ## Installation
 
-`gem install cinch-authentication` or add `gem 'cinch-authentication'` to your
-Gemfile.
+### Rubygems
+
+```shell
+gem install cinch-authentication
+```
+
+### Bundler
+
+```ruby
+gem 'cinch-authentication', :require => 'cinch/extensions/authentication'
+```
 
 ## License
 
