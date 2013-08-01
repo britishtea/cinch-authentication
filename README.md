@@ -55,6 +55,8 @@ module Cinch::Plugins
 end
 ```
 
+When using the user_list strategy, note that the user must be identified with nickserv (+r) in order for the plugin to recognize you.
+
 ## Installation
 
 ### Rubygems
