@@ -55,6 +55,12 @@ module Cinch::Plugins
 end
 ```
 
+
+For more documenation on usage see the 
+[wiki](https://github.com/britishtea/cinch-authentication/wiki). For more 
+documentation on the API see 
+[rubydoc.org](http://rubydoc.org/gems/cinch-authentication/frames).
+
 ## Installation
 
 ### Rubygems
