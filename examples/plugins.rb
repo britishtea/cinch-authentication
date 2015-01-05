@@ -2,6 +2,7 @@ class Admin
   include Cinch::Plugin
   include Cinch::Extensions::Authentication
 
+  # This enables authentication for the full plugin.
   enable_authentication
 
   match /quit/, :method => :quit

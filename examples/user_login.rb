@@ -7,11 +7,11 @@ require_relative 'plugins'
 # authenticate method, that checks if a given password matches.
 class User < Struct.new :nickname, :password, :type
   def authenticate(pass)
-    password == pass # Yep, very insecure.
+    password == pass
   end
 end
 
-# Yep, pretty nasty.
+# Simulate a database.
 $users = []
 $users << User.new('waxjar', '0000', 'admin')
 $users << User.new('shades', '1234', 'user')
@@ -21,6 +21,9 @@ bot = Cinch::Bot.new do
     c.server                  = 'irc.freenode.org'
     c.channels                = ['#cinch-authentication']
 
+    # Global configuration. This means that all plugins / matchers that
+    # implement authentication make use of the :login strategy, with a user
+    # level of :users.
     c.authentication          = Cinch::Configuration::Authentication.new
     c.authentication.strategy = :login
     c.authentication.level    = :users
@@ -46,11 +49,16 @@ bot = Cinch::Bot.new do
     # allowed to run a command.
     c.authentication.users  = lambda { |user| user.type == 'user' }
     c.authentication.admins = lambda { |user| user.type == 'admin' }
-    
+
+    # Plugin-specific configuration. This means that for the Admin plugin, a
+    # user level of :admins required. The strategy is inherited from the global
+    # configuration.
     c.plugins.plugins << Admin
     c.plugins.options[Admin][:authentication_level] = :admins
 
     c.plugins.plugins << Quote
+
+    # To allow users to login cinch-authentication provides a plugin.
     c.plugins.plugins << Cinch::Plugins::UserLogin
   end
 end
