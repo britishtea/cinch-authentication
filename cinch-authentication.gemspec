@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name          = "cinch-authentication"
-  s.version       = '0.1.0'
+  s.version       = '0.1.1'
   s.authors       = ["Paul Brickfeld"]
   s.email         = ["paulbrickfeld@gmail.com"]
   s.homepage      = "https://github.com/britishtea/cinch-authentication"
@@ -11,7 +11,6 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files app lib`.split("\n")
   s.platform      = Gem::Platform::RUBY
   s.require_paths = ['lib']
-  s.rubyforge_project = '[none]'
 
-  s.add_dependency 'cinch', '~> 2.0.3'
+  s.add_dependency 'cinch', '~> 2.0'
 end
