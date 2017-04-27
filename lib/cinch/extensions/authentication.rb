@@ -53,7 +53,7 @@ module Cinch
       # level - The level Symbol.
       def channel_status_strategy(m, level)
         if config.has_key? :authentication_channel
-          channel = Channel channel[:authentication_channel]
+          channel = Channel config[:authentication_channel]
         elsif bot.config.authentication.channel
           channel = Channel bot.config.authentication.channel
         else
